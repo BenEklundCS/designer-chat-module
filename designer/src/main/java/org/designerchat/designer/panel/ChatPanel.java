@@ -4,6 +4,9 @@ package org.designerchat.designer.panel;
 import com.inductiveautomation.ignition.common.util.LoggerEx;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import org.designerchat.common.ChatHistoryRecord;
 import org.designerchat.common.IChatAPI;
@@ -21,9 +24,15 @@ public class ChatPanel extends JPanel {
 
     private final ArrayList<ChatHistoryRecord> chatHistory;
 
+    private final ScheduledExecutorService checkHealthScheduler;
+
     public ChatPanel(IChatAPI chatAPI) {
         this.chatAPI = chatAPI;
         this.chatHistory = new ArrayList<>();
+
+        this.checkHealthScheduler = Executors.newScheduledThreadPool(1);
+        this.checkHealthScheduler.scheduleAtFixedRate(this::checkHealth, 0, 5, TimeUnit.SECONDS);
+
         setLayout(new BorderLayout());
         initTopbar();
         initChatInput();
@@ -32,7 +41,7 @@ public class ChatPanel extends JPanel {
 
     // initializers
     private void initTopbar() {
-        this.topbar = new Topbar(this::checkHealth, this::clearConversation);
+        this.topbar = new Topbar(this::clearConversation);
         add(this.topbar, BorderLayout.NORTH);
         loadModels();
     }
@@ -102,6 +111,6 @@ public class ChatPanel extends JPanel {
 
     // class utils
     public void shutdown() {
-        this.topbar.shutdown();
+        checkHealthScheduler.shutdown();
     }
 }

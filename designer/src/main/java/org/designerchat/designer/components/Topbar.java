@@ -4,9 +4,6 @@ package org.designerchat.designer.components;
 import com.inductiveautomation.ignition.common.util.LoggerEx;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
 // top bar with health indicator, model selector, and clear button
@@ -14,14 +11,9 @@ public class Topbar extends JPanel {
     private final JComboBox<String> modelSelector;
     private final JLabel connectedIndicator;
     private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.topbar");
-    private final ScheduledExecutorService healthScheduler;
 
-    public Topbar(Runnable healthTask, Runnable onClear) {
+    public Topbar(Runnable onClear) {
         setLayout(new BorderLayout());
-
-        // poll health status every 5 seconds
-        this.healthScheduler = Executors.newScheduledThreadPool(1);
-        this.healthScheduler.scheduleAtFixedRate(healthTask, 0, 5, TimeUnit.SECONDS);
 
         this.connectedIndicator = new JLabel("•");
         this.connectedIndicator.setFont(connectedIndicator.getFont().deriveFont(24f));
@@ -47,9 +39,5 @@ public class Topbar extends JPanel {
 
     public String getSelectedModel() {
         return (String) modelSelector.getSelectedItem();
-    }
-
-    public void shutdown() {
-        healthScheduler.shutdown();
     }
 }
