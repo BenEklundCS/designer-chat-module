@@ -67,7 +67,9 @@ public class ChatPanel extends JPanel {
 
         this.chatAPI
                 .chatCompletion(selectedModel, this.chatHistory) // async add model message
-                .thenAccept(this::addToChatHistory)
+                .thenAccept(newModelRecord -> SwingUtilities.invokeLater(() -> {
+                    addToChatHistory(newModelRecord);
+                }))
                 .exceptionally((error) -> {
                     logger.error("Chat completion failed: " + error);
                     SwingUtilities.invokeLater(() -> this.chatInput.setLoading(false));
@@ -97,11 +99,9 @@ public class ChatPanel extends JPanel {
 
     // ui
     private void addToChatHistory(ChatHistoryRecord historyRecord) {
-        SwingUtilities.invokeLater(() -> {
-            this.chatHistory.add(historyRecord);
-            this.conversationArea.updateText(this.chatHistory);
-            this.chatInput.setLoading(false);
-        });
+        this.chatHistory.add(historyRecord);
+        this.conversationArea.updateText(this.chatHistory);
+        this.chatInput.setLoading(false);
     }
 
     private void clearConversation() {
