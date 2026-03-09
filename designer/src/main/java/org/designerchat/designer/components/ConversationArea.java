@@ -16,6 +16,7 @@ public class ConversationArea extends JPanel {
         this.conversationText = new JTextArea();
         this.conversationText.setEditable(false);
         this.conversationText.setLineWrap(true);
+        this.conversationText.setWrapStyleWord(true);
         // suppress beep on keystrokes while keeping focus for copy-paste
         this.conversationText.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
@@ -23,7 +24,9 @@ public class ConversationArea extends JPanel {
                 e.consume();
             }
         });
-        add(new JScrollPane(this.conversationText), BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(this.conversationText);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     public void updateText(ArrayList<ChatHistoryRecord> chatHistory) {
