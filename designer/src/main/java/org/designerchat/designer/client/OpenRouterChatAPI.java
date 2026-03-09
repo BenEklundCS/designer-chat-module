@@ -72,7 +72,7 @@ public class OpenRouterChatAPI implements IChatAPI {
         }
     }
 
-    // response parsers — filter to free models only
+    // response parsers
 
     private static ArrayList<String> getModelsFromResponse(HttpResponse<String> response) {
         String body = response.body();

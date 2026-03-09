@@ -56,8 +56,7 @@ public class ChatPanel extends JPanel {
         add(this.conversationArea, BorderLayout.CENTER);
     }
 
-    // main functions
-
+    // api
     private void sendChat(String message) {
         this.chatInput.setLoading(true);
         String selectedModel = this.topbar.getSelectedModel();
@@ -87,14 +86,6 @@ public class ChatPanel extends JPanel {
                 });
     }
 
-    private void addToChatHistory(ChatHistoryRecord historyRecord) {
-        SwingUtilities.invokeLater(() -> {
-            this.chatHistory.add(historyRecord);
-            this.conversationArea.updateText(this.chatHistory);
-            this.chatInput.setLoading(false);
-        });
-    }
-
     private void loadModels() {
         chatAPI.listModels()
                 .thenAccept(models -> SwingUtilities.invokeLater(() -> this.topbar.setModels(models)))
@@ -102,6 +93,15 @@ public class ChatPanel extends JPanel {
                     logger.error("Failed to load models", e);
                     return null;
                 });
+    }
+
+    // ui
+    private void addToChatHistory(ChatHistoryRecord historyRecord) {
+        SwingUtilities.invokeLater(() -> {
+            this.chatHistory.add(historyRecord);
+            this.conversationArea.updateText(this.chatHistory);
+            this.chatInput.setLoading(false);
+        });
     }
 
     private void clearConversation() {

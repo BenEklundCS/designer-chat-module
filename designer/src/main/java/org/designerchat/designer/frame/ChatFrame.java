@@ -18,6 +18,7 @@ public class ChatFrame extends DockableFrame {
         setInitMode(DockContext.STATE_FRAMEDOCKED);
         setPreferredSize(new Dimension(350, 600));
         setVisible(true);
+
         this.chatPanel = new ChatPanel(chatAPI);
         getContentPane().add(this.chatPanel, BorderLayout.CENTER);
     }
