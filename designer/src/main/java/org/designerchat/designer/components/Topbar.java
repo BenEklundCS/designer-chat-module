@@ -36,10 +36,7 @@ public class Topbar extends JPanel {
     }
 
     public void setHealth(boolean health) {
-        SwingUtilities.invokeLater(() -> {
-            logger.info("Connection status: " + (health ? "Connected" : "Disconnected"));
-            connectedIndicator.setForeground(health ? Color.GREEN : Color.RED);
-        });
+        connectedIndicator.setForeground(health ? Color.GREEN : Color.RED);
     }
 
     public void setModels(ArrayList<String> models) {

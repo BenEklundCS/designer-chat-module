@@ -69,7 +69,9 @@ public class ChatPanel extends JPanel {
     }
 
     private void checkHealth() {
-        this.chatAPI.isHealthy().thenAccept((isHealthy) -> this.topbar.setHealth(isHealthy));
+        this.chatAPI.isHealthy().thenAccept(isHealthy ->
+            SwingUtilities.invokeLater(() -> this.topbar.setHealth(isHealthy))
+        );
     }
 
     private void addToChatHistory(ChatHistoryRecord historyRecord) {
