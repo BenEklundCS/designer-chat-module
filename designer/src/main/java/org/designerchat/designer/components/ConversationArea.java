@@ -4,20 +4,26 @@ package org.designerchat.designer.components;
 import org.designerchat.common.ChatHistoryRecord;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 // read-only text area that displays conversation history
-public class ConversationArea extends JTextArea {
+public class ConversationArea extends JPanel {
+    private final JTextArea conversationText;
+
     public ConversationArea() {
-        setEditable(false);
-        setLineWrap(true);
+        setLayout(new BorderLayout());
+        this.conversationText = new JTextArea();
+        this.conversationText.setEditable(false);
+        this.conversationText.setLineWrap(true);
         // suppress beep on keystrokes while keeping focus for copy-paste
-        addKeyListener(new java.awt.event.KeyAdapter() {
+        this.conversationText.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyTyped(java.awt.event.KeyEvent e) {
                 e.consume();
             }
         });
+        add(new JScrollPane(this.conversationText), BorderLayout.CENTER);
     }
 
     public void updateText(ArrayList<ChatHistoryRecord> chatHistory) {
@@ -25,6 +31,6 @@ public class ConversationArea extends JTextArea {
         for (ChatHistoryRecord record : chatHistory) {
             conversation.append(record.role()).append(": ").append(record.content()).append("\n\n");
         }
-        setText(conversation.toString());
+        this.conversationText.setText(conversation.toString());
     }
 }

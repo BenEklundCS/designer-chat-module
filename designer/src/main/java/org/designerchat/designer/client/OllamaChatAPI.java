@@ -1,5 +1,5 @@
 // Designer Chat Module - Ben Eklund 2026
-package org.designerchat.designer;
+package org.designerchat.designer.client;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -20,12 +20,12 @@ import org.designerchat.common.BuildConfig;
 import org.designerchat.common.ChatHistoryRecord;
 import org.designerchat.common.IChatAPI;
 
-// IChatAPI implementation for OpenRouter (free models only)
-public class OpenRouterChatAPI implements IChatAPI {
+// IChatAPI implementation for Open WebUI (Ollama backend)
+public class OllamaChatAPI implements IChatAPI {
     private final HttpClient client;
-    private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.openrouterchatapi");
+    private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.ollamachatapi");
 
-    public OpenRouterChatAPI() {
+    public OllamaChatAPI() {
         client = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
@@ -33,12 +33,12 @@ public class OpenRouterChatAPI implements IChatAPI {
 
     @Override
     public CompletableFuture<Boolean> isHealthy() {
-        HttpRequest request = authRequestBuilder("/api/v1/models")
+        HttpRequest request = authRequestBuilder("/health")
                 .GET()
                 .build();
         try {
             return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(response -> response.statusCode() == 200);
+                    .thenApply((response) -> response.statusCode() == 200);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return CompletableFuture.completedFuture(false);
@@ -52,7 +52,7 @@ public class OpenRouterChatAPI implements IChatAPI {
                 .build();
         try {
             return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(OpenRouterChatAPI::getModelsFromResponse);
+                    .thenApply(OllamaChatAPI::getModelsFromResponse);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return CompletableFuture.completedFuture(new ArrayList<>());
@@ -62,36 +62,33 @@ public class OpenRouterChatAPI implements IChatAPI {
     @Override
     public CompletableFuture<ChatHistoryRecord> chatCompletion(String model, ArrayList<ChatHistoryRecord> history) {
         String requestBodyStr = getCompletionRequestString(model, history);
-        logger.info("Request URL: " + BuildConfig.OPENROUTER_HOST + "/api/v1/chat/completions");
+        logger.info("Request URL: " + BuildConfig.OPENWEBUI_HOST + "/api/chat/completions");
         logger.info("Request Body: " + requestBodyStr);
 
-        HttpRequest request = authRequestBuilder("/api/v1/chat/completions")
+        HttpRequest request = authRequestBuilder("/api/chat/completions")
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(requestBodyStr))
                 .build();
 
         try {
             return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                    .thenApply(OpenRouterChatAPI::getChatHistoryRecordFromResponse);
+                    .thenApply(OllamaChatAPI::getChatHistoryRecordFromResponse);
         } catch (Exception e) {
             logger.error(e.getMessage());
             return CompletableFuture.completedFuture(new ChatHistoryRecord("assistant", "Failed to generate chat completion."));
         }
     }
 
-    // response parsers — filter to free models only
+    // response parsers
 
     private static ArrayList<String> getModelsFromResponse(HttpResponse<String> response) {
         String body = response.body();
         JsonObject jsonBody = JsonParser.parseString(body).getAsJsonObject();
         JsonArray data = jsonBody.getAsJsonArray("data");
 
-        ArrayList<String> res = new ArrayList<>();
+        ArrayList<String> res = new ArrayList<String>();
         for (JsonElement element : data) {
-            String id = element.getAsJsonObject().get("id").getAsString();
-            if (id.endsWith(":free")) {
-                res.add(id);
-            }
+            res.add(element.getAsJsonObject().get("name").getAsString());
         }
         return res;
     }
@@ -144,8 +141,8 @@ public class OpenRouterChatAPI implements IChatAPI {
     private HttpRequest.Builder authRequestBuilder(String path) {
         try {
             return HttpRequest.newBuilder()
-                    .uri(new URI(BuildConfig.OPENROUTER_HOST + path))
-                    .header("Authorization", "Bearer " + BuildConfig.OPENROUTER_KEY)
+                    .uri(new URI(BuildConfig.OPENWEBUI_HOST + path))
+                    .header("Authorization", "Bearer " + BuildConfig.OPENWEBUI_KEY)
                     .timeout(Duration.ofMinutes(2));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

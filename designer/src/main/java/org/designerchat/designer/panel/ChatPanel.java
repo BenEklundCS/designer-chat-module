@@ -46,7 +46,7 @@ public class ChatPanel extends JPanel {
 
     private void initConversationArea() {
         ConversationArea conversationArea = new ConversationArea();
-        add(new JScrollPane(conversationArea), BorderLayout.CENTER);
+        add(conversationArea, BorderLayout.CENTER);
         this.conversationArea = conversationArea;
     }
 

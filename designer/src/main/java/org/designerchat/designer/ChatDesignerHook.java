@@ -5,6 +5,7 @@ import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.common.util.LoggerEx;
 import com.inductiveautomation.ignition.designer.model.AbstractDesignerModuleHook;
 import com.inductiveautomation.ignition.designer.model.DesignerContext;
+import org.designerchat.designer.client.OpenRouterChatAPI;
 import org.designerchat.designer.frame.ChatFrame;
 
 // module entry point for the designer scope
