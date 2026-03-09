@@ -8,24 +8,24 @@ import com.inductiveautomation.ignition.gateway.model.GatewayContext;
 
 public class ChatGatewayHook extends AbstractGatewayModuleHook {
 
-    private static final LoggerEx log = LoggerEx.newBuilder().build("designerchat.gateway");
+    private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.gateway");
 
     private GatewayContext gatewayContext;
 
     @Override
     public void setup(GatewayContext context) {
         this.gatewayContext = context;
-        log.info("Setting up Designer Chat Module.");
+        logger.info("Setting up Designer Chat Module.");
     }
 
     @Override
     public void startup(LicenseState activationState) {
-        log.info("Starting up Designer Chat Module.");
+        logger.info("Starting up Designer Chat Module.");
     }
 
     @Override
     public void shutdown() {
-        log.info("Shutting down Designer Chat Module.");
+        logger.info("Shutting down Designer Chat Module.");
     }
 
     @Override

@@ -38,7 +38,7 @@ ignitionModule {
 }
 
 // ── Deploy configuration ────────────────────────────────────────────────────
-val gatewayHost = "http://10.0.0.84:8088"
+val gatewayHost = providers.gradleProperty("gatewayHost").getOrElse("http://localhost:8088")
 val gatewayApiKey = providers.gradleProperty("gatewayApiKey").getOrElse("")
 val moduleId = "org.designerchat.designerchat"
 

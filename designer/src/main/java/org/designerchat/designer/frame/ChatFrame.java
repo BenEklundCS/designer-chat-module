@@ -7,7 +7,6 @@ import java.awt.*;
 import org.designerchat.common.IChatAPI;
 import org.designerchat.designer.panel.ChatPanel;
 
-// dockable frame that hosts the chat panel in the designer
 public class ChatFrame extends DockableFrame {
     private final ChatPanel chatPanel;
 

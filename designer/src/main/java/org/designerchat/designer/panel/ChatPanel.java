@@ -39,9 +39,8 @@ public class ChatPanel extends JPanel {
         initConversationArea();
     }
 
-    // initializers
     private void initTopbar() {
-        this.topbar = new Topbar(this::clearConversation);
+        this.topbar = new Topbar(this::clearChatHistory);
         add(this.topbar, BorderLayout.NORTH);
         loadModels();
     }
@@ -56,19 +55,18 @@ public class ChatPanel extends JPanel {
         add(this.conversationArea, BorderLayout.CENTER);
     }
 
-    // api
     private void sendChat(String message) {
         this.chatInput.setLoading(true);
         String selectedModel = this.topbar.getSelectedModel();
-        ChatHistoryRecord newUserRecord = new ChatHistoryRecord("user", message);
 
-        this.chatHistory.add(newUserRecord);
+        addToChatHistory(new ChatHistoryRecord("user", message));
         this.conversationArea.updateText(this.chatHistory);
 
         this.chatAPI
                 .chatCompletion(selectedModel, this.chatHistory) // async add model message
                 .thenAccept(newModelRecord -> SwingUtilities.invokeLater(() -> {
                     addToChatHistory(newModelRecord);
+                    this.chatInput.setLoading(false);
                 }))
                 .exceptionally((error) -> {
                     logger.error("Chat completion failed: " + error);
@@ -97,19 +95,16 @@ public class ChatPanel extends JPanel {
                 });
     }
 
-    // ui
     private void addToChatHistory(ChatHistoryRecord historyRecord) {
         this.chatHistory.add(historyRecord);
         this.conversationArea.updateText(this.chatHistory);
-        this.chatInput.setLoading(false);
     }
 
-    private void clearConversation() {
+    private void clearChatHistory() {
         this.chatHistory.clear();
         this.conversationArea.updateText(this.chatHistory);
     }
 
-    // class utils
     public void shutdown() {
         checkHealthScheduler.shutdown();
     }

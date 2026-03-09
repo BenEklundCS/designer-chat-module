@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.swing.*;
 import org.designerchat.common.ChatHistoryRecord;
 
-// read-only text area that displays conversation history
 public class ConversationArea extends JPanel {
     private final JTextArea conversationText;
 

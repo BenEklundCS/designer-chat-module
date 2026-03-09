@@ -5,26 +5,26 @@ import java.awt.*;
 import java.util.function.Consumer;
 import javax.swing.*;
 
-// chat input with text area and send button
 public class ChatInput extends JPanel {
     private final JButton sendChatButton;
+    private final JTextArea chatInput;
 
     public ChatInput(Consumer<String> sendChat) {
         setLayout(new BorderLayout());
 
-        JTextArea chatInput = new JTextArea(3, 20);
-        JButton sendChatButton = new JButton("Send");
+        this.chatInput = new JTextArea(3, 20);
+        JScrollPane scrollPane = new JScrollPane(this.chatInput);
+        this.sendChatButton = new JButton("Send");
 
-        sendChatButton.addActionListener((e) -> {
-            String message = chatInput.getText();
-            chatInput.setText("");
+        this.sendChatButton.addActionListener((e) -> {
+            String message = this.chatInput.getText();
+            this.chatInput.setText("");
             sendChat.accept(message);
         });
 
-        add(new JScrollPane(chatInput), BorderLayout.CENTER);
-        add(sendChatButton, BorderLayout.EAST);
+        add(scrollPane, BorderLayout.CENTER);
+        add(this.sendChatButton, BorderLayout.EAST);
 
-        this.sendChatButton = sendChatButton;
     }
 
     public void setLoading(boolean loading) {

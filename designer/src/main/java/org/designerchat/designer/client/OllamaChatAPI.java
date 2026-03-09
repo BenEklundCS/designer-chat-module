@@ -18,7 +18,6 @@ import org.designerchat.common.BuildConfig;
 import org.designerchat.common.ChatHistoryRecord;
 import org.designerchat.common.IChatAPI;
 
-// IChatAPI implementation for Open WebUI (Ollama backend)
 public class OllamaChatAPI implements IChatAPI {
     private final HttpClient client;
     private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.ollamachatapi");
@@ -54,8 +53,6 @@ public class OllamaChatAPI implements IChatAPI {
     @Override
     public CompletableFuture<ChatHistoryRecord> chatCompletion(String model, ArrayList<ChatHistoryRecord> history) {
         String requestBodyStr = getCompletionRequestString(model, history);
-        logger.info("Request URL: " + BuildConfig.OPENWEBUI_HOST + "/api/chat/completions");
-        logger.info("Request Body: " + requestBodyStr);
 
         HttpRequest request = authRequestBuilder("/api/chat/completions")
                 .header("Content-Type", "application/json")
@@ -71,8 +68,6 @@ public class OllamaChatAPI implements IChatAPI {
                     new ChatHistoryRecord("assistant", "Failed to generate chat completion."));
         }
     }
-
-    // response parsers
 
     private static ArrayList<String> getModelsFromResponse(HttpResponse<String> response) {
         String body = response.body();
@@ -104,8 +99,6 @@ public class OllamaChatAPI implements IChatAPI {
 
     private static ChatHistoryRecord getChatHistoryRecordFromResponse(HttpResponse<String> response) {
         String body = response.body();
-        logger.info("Status: " + response.statusCode());
-        logger.info("Body: " + body);
 
         if (response.statusCode() != 200) {
             logger.error("Chat completion failed with status: " + response.statusCode() + ": " + body);
@@ -122,12 +115,8 @@ public class OllamaChatAPI implements IChatAPI {
         }
 
         JsonObject messageJson = choices.get(0).getAsJsonObject().getAsJsonObject("message");
-        ChatHistoryRecord historyRecord = ChatHistoryRecord.fromJson(messageJson);
 
-        logger.info(historyRecord.role());
-        logger.info(historyRecord.content());
-
-        return historyRecord;
+        return ChatHistoryRecord.fromJson(messageJson);
     }
 
     private HttpRequest.Builder authRequestBuilder(String path) {

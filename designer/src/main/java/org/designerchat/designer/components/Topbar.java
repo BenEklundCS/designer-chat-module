@@ -6,7 +6,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-// top bar with health indicator, model selector, and clear button
 public class Topbar extends JPanel {
     private final JComboBox<String> modelSelector;
     private final JLabel connectedIndicator;
@@ -17,6 +16,9 @@ public class Topbar extends JPanel {
 
         this.connectedIndicator = new JLabel("•");
         this.connectedIndicator.setFont(connectedIndicator.getFont().deriveFont(24f));
+        this.connectedIndicator.setPreferredSize(new Dimension(16, 16));
+        this.connectedIndicator.setHorizontalAlignment(SwingConstants.CENTER);
+
         this.modelSelector = new JComboBox<>();
 
         JButton clearButton = new JButton("Clear");

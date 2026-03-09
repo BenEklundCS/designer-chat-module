@@ -1,4 +1,5 @@
-﻿gatewayApiKey=**************************************
+﻿gatewayHost=http://localhost:8088
+gatewayApiKey=**************************************
 openWebuiKey=***********************************
 openWebuiHost=http://127.0.0.1:3000
 openRouterKey=***********************************
