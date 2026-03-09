@@ -1,9 +1,9 @@
 // Designer Chat Module - Ben Eklund 2026
 package org.designerchat.designer.components;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
+import javax.swing.*;
 
 // chat input with text area and send button
 public class ChatInput extends JPanel {

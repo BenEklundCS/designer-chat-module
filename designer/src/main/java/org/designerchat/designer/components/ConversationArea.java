@@ -1,11 +1,10 @@
 // Designer Chat Module - Ben Eklund 2026
 package org.designerchat.designer.components;
 
-import org.designerchat.common.ChatHistoryRecord;
-
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.*;
+import org.designerchat.common.ChatHistoryRecord;
 
 // read-only text area that displays conversation history
 public class ConversationArea extends JPanel {
@@ -32,7 +31,11 @@ public class ConversationArea extends JPanel {
     public void updateText(ArrayList<ChatHistoryRecord> chatHistory) {
         StringBuilder conversation = new StringBuilder();
         for (ChatHistoryRecord record : chatHistory) {
-            conversation.append(record.role()).append(": ").append(record.content()).append("\n\n");
+            conversation
+                    .append(record.role())
+                    .append(": ")
+                    .append(record.content())
+                    .append("\n\n");
         }
         this.conversationText.setText(conversation.toString());
     }

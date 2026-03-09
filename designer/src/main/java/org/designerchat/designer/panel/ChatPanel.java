@@ -1,15 +1,15 @@
 // Designer Chat Module - Ben Eklund 2026
 package org.designerchat.designer.panel;
+
 import com.inductiveautomation.ignition.common.util.LoggerEx;
+import java.awt.*;
+import java.util.ArrayList;
+import javax.swing.*;
 import org.designerchat.common.ChatHistoryRecord;
 import org.designerchat.common.IChatAPI;
 import org.designerchat.designer.components.ChatInput;
 import org.designerchat.designer.components.ConversationArea;
 import org.designerchat.designer.components.Topbar;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 public class ChatPanel extends JPanel {
     private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.chatpanel");
@@ -57,7 +57,8 @@ public class ChatPanel extends JPanel {
         this.chatHistory.add(newUserRecord);
         this.conversationArea.updateText(this.chatHistory);
 
-        this.chatAPI.chatCompletion(selectedModel, this.chatHistory) // async add model message
+        this.chatAPI
+                .chatCompletion(selectedModel, this.chatHistory) // async add model message
                 .thenAccept(this::addToChatHistory)
                 .exceptionally((error) -> {
                     logger.error("Chat completion failed: " + error);
@@ -67,23 +68,22 @@ public class ChatPanel extends JPanel {
     }
 
     private void checkHealth() {
-        this.chatAPI.isHealthy().thenAccept(isHealthy ->
-            SwingUtilities.invokeLater(() -> this.topbar.setHealth(isHealthy))
-        ).exceptionally((error) -> {
-            logger.error("Health check failed: " + error);
-            SwingUtilities.invokeLater(() -> this.topbar.setHealth(false));
-            return null;
-        });
+        this.chatAPI
+                .isHealthy()
+                .thenAccept(isHealthy -> SwingUtilities.invokeLater(() -> this.topbar.setHealth(isHealthy)))
+                .exceptionally((error) -> {
+                    logger.error("Health check failed: " + error);
+                    SwingUtilities.invokeLater(() -> this.topbar.setHealth(false));
+                    return null;
+                });
     }
 
     private void addToChatHistory(ChatHistoryRecord historyRecord) {
-        SwingUtilities.invokeLater(
-                () -> {
-                    this.chatHistory.add(historyRecord);
-                    this.conversationArea.updateText(this.chatHistory);
-                    this.chatInput.setLoading(false);
-                }
-        );
+        SwingUtilities.invokeLater(() -> {
+            this.chatHistory.add(historyRecord);
+            this.conversationArea.updateText(this.chatHistory);
+            this.chatInput.setLoading(false);
+        });
     }
 
     private void loadModels() {

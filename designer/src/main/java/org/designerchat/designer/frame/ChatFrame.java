@@ -1,11 +1,11 @@
 // Designer Chat Module - Ben Eklund 2026
 package org.designerchat.designer.frame;
+
 import com.jidesoft.docking.DockContext;
 import com.jidesoft.docking.DockableFrame;
+import java.awt.*;
 import org.designerchat.common.IChatAPI;
 import org.designerchat.designer.panel.ChatPanel;
-
-import java.awt.*;
 
 // dockable frame that hosts the chat panel in the designer
 public class ChatFrame extends DockableFrame {

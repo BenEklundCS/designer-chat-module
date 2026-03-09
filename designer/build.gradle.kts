@@ -1,5 +1,17 @@
 plugins {
     `java-library`
+    checkstyle
+    id("com.diffplug.spotless") version "6.25.0"
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
+}
+
+spotless {
+    java {
+        palantirJavaFormat()
+    }
 }
 
 java {
