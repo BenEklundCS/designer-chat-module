@@ -9,7 +9,7 @@ import java.awt.*;
 
 // dockable frame that hosts the chat panel in the designer
 public class ChatFrame extends DockableFrame {
-    private ChatPanel chatPanel;
+    private final ChatPanel chatPanel;
 
     public ChatFrame(IChatAPI chatAPI) {
         setTitle("Chat");
