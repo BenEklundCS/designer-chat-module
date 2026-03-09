@@ -4,6 +4,20 @@ An Ignition Designer docked window module backed by a local [OpenWebUI](https://
 
 Extend `IChatAPI` to swap to a different API provider.
 
+### Overview
+
+1. Select AI Model in the Dropdown
+2. Connected status displayed on • indicator to the left of the dropdown
+3. Clear chat by clicking "Clear"
+4. Type into the text area and press "Send" to send a message to the model 
+<img width="1485" height="604" alt="image" src="https://github.com/user-attachments/assets/33a0c622-915f-4355-a03f-e67794c1c78d" />
+
+
+Access from **View > Panels > Chat**
+
+<img width="377" height="144" alt="image" src="https://github.com/user-attachments/assets/e4dfa489-42fc-4303-ae4f-06e35509f168" />
+
+
 ## Setup
 
 ### Prerequisites
