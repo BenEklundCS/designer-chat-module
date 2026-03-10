@@ -13,6 +13,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.designerchat.common.BuildConfig;
 import org.designerchat.common.ChatHistoryRecord;
@@ -24,14 +25,16 @@ public class OllamaChatAPI implements IChatAPI {
     private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.ollamachatapi");
 
     public OllamaChatAPI() {
-        client = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
+        this.client =
+                HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
     }
 
     @Override
     public CompletableFuture<Boolean> isHealthy() {
         HttpRequest request = authRequestBuilder("/health").GET().build();
         try {
-            return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            return this.client
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply((response) -> response.statusCode() == 200);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -40,10 +43,11 @@ public class OllamaChatAPI implements IChatAPI {
     }
 
     @Override
-    public CompletableFuture<ArrayList<String>> listModels() {
+    public CompletableFuture<List<String>> listModels() {
         HttpRequest request = authRequestBuilder("/api/v1/models").GET().build();
         try {
-            return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            return this.client
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(OllamaChatAPI::getModelsFromResponse);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -52,7 +56,7 @@ public class OllamaChatAPI implements IChatAPI {
     }
 
     @Override
-    public CompletableFuture<ChatHistoryRecord> chatCompletion(String model, ArrayList<ChatHistoryRecord> history) {
+    public CompletableFuture<ChatHistoryRecord> chatCompletion(String model, List<ChatHistoryRecord> history) {
         String requestBodyStr = getCompletionRequestString(model, history);
 
         HttpRequest request = authRequestBuilder("/api/chat/completions")
@@ -61,7 +65,8 @@ public class OllamaChatAPI implements IChatAPI {
                 .build();
 
         try {
-            return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+            return this.client
+                    .sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenApply(OllamaChatAPI::getChatHistoryRecordFromResponse);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -82,7 +87,7 @@ public class OllamaChatAPI implements IChatAPI {
         return res;
     }
 
-    private static String getCompletionRequestString(String model, ArrayList<ChatHistoryRecord> history) {
+    private static String getCompletionRequestString(String model, List<ChatHistoryRecord> history) {
         JsonObject jsonRequestBody = new JsonObject();
         jsonRequestBody.addProperty("model", model);
 

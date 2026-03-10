@@ -24,7 +24,7 @@ public class ChatDesignerHook extends AbstractDesignerModuleHook {
         // swap OpenRouterChatAPI for OllamaChatAPI to use local models
         this.chatFrame = new ChatFrame(new OpenRouterChatAPI());
         this.context.getDockingManager().addFrame(this.chatFrame);
-        this.context.getDockingManager().showFrame("ChatFrame");
+        this.context.getDockingManager().showFrame(this.chatFrame.getKey());
     }
 
     @Override

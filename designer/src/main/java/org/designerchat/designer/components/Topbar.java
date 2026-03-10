@@ -3,7 +3,7 @@ package org.designerchat.designer.components;
 
 import com.inductiveautomation.ignition.common.util.LoggerEx;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 public class Topbar extends JPanel {
@@ -15,7 +15,7 @@ public class Topbar extends JPanel {
         setLayout(new BorderLayout());
 
         this.connectedIndicator = new JLabel("•");
-        this.connectedIndicator.setFont(connectedIndicator.getFont().deriveFont(24f));
+        this.connectedIndicator.setFont(this.connectedIndicator.getFont().deriveFont(24f));
         this.connectedIndicator.setPreferredSize(new Dimension(16, 16));
         this.connectedIndicator.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -24,22 +24,22 @@ public class Topbar extends JPanel {
         JButton clearButton = new JButton("Clear");
         clearButton.addActionListener(e -> onClear.run());
 
-        add(connectedIndicator, BorderLayout.WEST);
-        add(modelSelector, BorderLayout.CENTER);
+        add(this.connectedIndicator, BorderLayout.WEST);
+        add(this.modelSelector, BorderLayout.CENTER);
         add(clearButton, BorderLayout.EAST);
     }
 
     public void setHealth(boolean health) {
-        connectedIndicator.setForeground(health ? Color.GREEN : Color.RED);
+        this.connectedIndicator.setForeground(health ? Color.GREEN : Color.RED);
     }
 
-    public void setModels(ArrayList<String> models) {
+    public void setModels(List<String> models) {
         for (String model : models) {
             this.modelSelector.addItem(model);
         }
     }
 
     public String getSelectedModel() {
-        return (String) modelSelector.getSelectedItem();
+        return (String) this.modelSelector.getSelectedItem();
     }
 }

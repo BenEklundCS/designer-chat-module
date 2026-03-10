@@ -40,6 +40,7 @@ tasks.named("compileJava") { dependsOn(generateBuildConfig) }
 dependencies {
     compileOnly(libs.ignition.common)
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation(libs.ignition.common)
 }
 
 tasks.test {

@@ -2,7 +2,9 @@
 package org.designerchat.designer.components;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
 import javax.swing.*;
 import org.designerchat.common.ChatHistoryRecord;
 
@@ -16,9 +18,9 @@ public class ConversationArea extends JPanel {
         this.conversationText.setLineWrap(true);
         this.conversationText.setWrapStyleWord(true);
         // suppress beep on keystrokes while keeping focus for copy-paste
-        this.conversationText.addKeyListener(new java.awt.event.KeyAdapter() {
+        this.conversationText.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(java.awt.event.KeyEvent e) {
+            public void keyTyped(KeyEvent e) {
                 e.consume();
             }
         });
@@ -27,7 +29,7 @@ public class ConversationArea extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void updateText(ArrayList<ChatHistoryRecord> chatHistory) {
+    public void updateText(List<ChatHistoryRecord> chatHistory) {
         StringBuilder conversation = new StringBuilder();
         for (ChatHistoryRecord record : chatHistory) {
             conversation.append(record);

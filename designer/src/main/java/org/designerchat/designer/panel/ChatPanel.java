@@ -4,6 +4,7 @@ package org.designerchat.designer.panel;
 import com.inductiveautomation.ignition.common.util.LoggerEx;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,7 @@ public class ChatPanel extends JPanel {
     private ConversationArea conversationArea;
     private ChatInput chatInput;
 
-    private final ArrayList<ChatHistoryRecord> chatHistory;
+    private final List<ChatHistoryRecord> chatHistory;
 
     private final ScheduledExecutorService checkHealthScheduler;
 
@@ -88,7 +89,8 @@ public class ChatPanel extends JPanel {
     }
 
     private void loadModels() {
-        chatAPI.listModels()
+        this.chatAPI
+                .listModels()
                 .thenAccept(models -> SwingUtilities.invokeLater(() -> this.topbar.setModels(models)))
                 .exceptionally(e -> {
                     logger.error("Failed to load models", e);
@@ -107,6 +109,6 @@ public class ChatPanel extends JPanel {
     }
 
     public void shutdown() {
-        checkHealthScheduler.shutdown();
+        this.checkHealthScheduler.shutdown();
     }
 }
