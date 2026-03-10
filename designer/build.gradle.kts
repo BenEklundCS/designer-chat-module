@@ -24,4 +24,9 @@ dependencies {
     api(projects.common)
     compileOnly(libs.ignition.common)
     compileOnly(libs.ignition.designer.api)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

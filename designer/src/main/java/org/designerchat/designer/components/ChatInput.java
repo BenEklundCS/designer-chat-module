@@ -24,7 +24,6 @@ public class ChatInput extends JPanel {
 
         add(scrollPane, BorderLayout.CENTER);
         add(this.sendChatButton, BorderLayout.EAST);
-
     }
 
     public void setLoading(boolean loading) {

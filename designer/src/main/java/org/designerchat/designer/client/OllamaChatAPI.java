@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import org.designerchat.common.BuildConfig;
 import org.designerchat.common.ChatHistoryRecord;
+import org.designerchat.common.ChatRole;
 import org.designerchat.common.IChatAPI;
 
 public class OllamaChatAPI implements IChatAPI {
@@ -65,7 +66,7 @@ public class OllamaChatAPI implements IChatAPI {
         } catch (Exception e) {
             logger.error(e.getMessage());
             return CompletableFuture.completedFuture(
-                    new ChatHistoryRecord("assistant", "Failed to generate chat completion."));
+                    new ChatHistoryRecord(ChatRole.ASSISTANT, "Failed to generate chat completion."));
         }
     }
 
@@ -88,7 +89,7 @@ public class OllamaChatAPI implements IChatAPI {
         JsonArray messages = new JsonArray();
         for (ChatHistoryRecord record : history) {
             JsonObject message = new JsonObject();
-            message.addProperty("role", record.role());
+            message.addProperty("role", record.role().toString());
             message.addProperty("content", record.content());
             messages.add(message);
         }
@@ -103,7 +104,7 @@ public class OllamaChatAPI implements IChatAPI {
         if (response.statusCode() != 200) {
             logger.error("Chat completion failed with status: " + response.statusCode() + ": " + body);
             return new ChatHistoryRecord(
-                    "assistant", "Failed to generate chat completion (HTTP " + response.statusCode() + ")");
+                    ChatRole.ASSISTANT, "Failed to generate chat completion (HTTP " + response.statusCode() + ")");
         }
 
         JsonObject jsonResponseBody = JsonParser.parseString(body).getAsJsonObject();
@@ -111,7 +112,8 @@ public class OllamaChatAPI implements IChatAPI {
 
         if (choices == null || choices.isEmpty()) {
             logger.error("Response missing `choices` array: " + body);
-            return new ChatHistoryRecord("assistant", "Failed to generate chat completion (no choices in response.)");
+            return new ChatHistoryRecord(
+                    ChatRole.ASSISTANT, "Failed to generate chat completion (no choices in response.)");
         }
 
         JsonObject messageJson = choices.get(0).getAsJsonObject().getAsJsonObject("message");

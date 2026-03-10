@@ -1,16 +1,12 @@
 // Designer Chat Module - Ben Eklund 2026
 package org.designerchat.designer;
 
-import com.inductiveautomation.ignition.client.tags.tree.node.BrowseTreeNode;
 import com.inductiveautomation.ignition.common.licensing.LicenseState;
 import com.inductiveautomation.ignition.common.util.LoggerEx;
 import com.inductiveautomation.ignition.designer.model.AbstractDesignerModuleHook;
 import com.inductiveautomation.ignition.designer.model.DesignerContext;
-import com.inductiveautomation.ignition.designer.sqltags.dialog.OnTagSelectedListener;
 import org.designerchat.designer.client.OpenRouterChatAPI;
 import org.designerchat.designer.frame.ChatFrame;
-
-import java.util.List;
 
 public class ChatDesignerHook extends AbstractDesignerModuleHook {
     private static final LoggerEx logger = LoggerEx.newBuilder().build("designerchat.designer");

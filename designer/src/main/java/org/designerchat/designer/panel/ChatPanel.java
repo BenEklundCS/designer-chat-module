@@ -9,6 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import org.designerchat.common.ChatHistoryRecord;
+import org.designerchat.common.ChatRole;
 import org.designerchat.common.IChatAPI;
 import org.designerchat.designer.components.ChatInput;
 import org.designerchat.designer.components.ConversationArea;
@@ -59,7 +60,7 @@ public class ChatPanel extends JPanel {
         this.chatInput.setLoading(true);
         String selectedModel = this.topbar.getSelectedModel();
 
-        addToChatHistory(new ChatHistoryRecord("user", message));
+        addToChatHistory(new ChatHistoryRecord(ChatRole.USER, message));
         this.conversationArea.updateText(this.chatHistory);
 
         this.chatAPI

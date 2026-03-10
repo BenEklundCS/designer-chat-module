@@ -30,11 +30,7 @@ public class ConversationArea extends JPanel {
     public void updateText(ArrayList<ChatHistoryRecord> chatHistory) {
         StringBuilder conversation = new StringBuilder();
         for (ChatHistoryRecord record : chatHistory) {
-            conversation
-                    .append(record.role())
-                    .append(": ")
-                    .append(record.content())
-                    .append("\n\n");
+            conversation.append(record);
         }
         this.conversationText.setText(conversation.toString());
     }
